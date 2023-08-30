@@ -28,7 +28,7 @@ cursor_2 = connection_2.cursor()
 
 #----------------------------------------TL Wise-------------------------
 
-columns_list_1=[ 'first_login_date', 'last_logout_date', 'employeeid', 'employeename','shift', 'shifts_timings', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'wo', 'ph', 'leaves', 'total_planned_', 'login_details', 'logout_details', 'attendance_present', 'log_date','sip','late_minutes','bio','lunch','tea','week_number','date','team_lead','non_rosted_count','roster_count','manager','tl','sr__manager','emp_deatail_id','user_name','total_working_hours','total_break_hours','schedule_adherence_percentage','total_hours','emp_id','login_adherence_percentage'] 
+columns_list_1=[ 'first_login_date', 'last_logout_date', 'employeeid', 'employeename','shift', 'shifts_timings', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun', 'wo', 'ph', 'leaves', 'total_planned_', 'login_details', 'logout_details', 'attendance_present', 'log_date','sip','late_minutes','bio','lunch','tea','week_number','date','team_lead','non_rosted_count','roster_count','manager','tl','sr__manager','emp_deatail_id','user_name','total_working_hours','total_break_hours','schedule_adherence_percentage','total_hours','emp_id','login_adherence_percentage','team_lead_name','manager_name'] 
 
 def work_adherence_rdb_testing():
     today = datetime.date.today()

@@ -309,6 +309,10 @@ def emp_details_sdb_function():
     query=f'''INSERT INTO emp_details_sdb (%s) VALUES %s;'''%(final_columns,a)
     cursor_dest.execute(query)
     connection_dest.commit()
+    query = '''SELECT updating_tl_and_manager_names();'''
+    cursor_dest.execute(query)
+    connection_dest.commit()
+
     print('sucessfully_uploaded')
 # emp_details_sdb_function()
 

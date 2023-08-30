@@ -284,7 +284,7 @@ def product_csat_rdb():
         query = '''drop table temp_product_csat;'''
         cursor2.execute(query)
         connection2.commit()
-        query = f'''UPDATE product_csat_rdb SET team_lead=t3.team_lead,designation=t3.designation,role_fit=t3.role_fit,tenure=t3.days_category,manager=t3.manager,sr_manager=t3.sr__manager,grid=t3.grid from (select t1.emp_id,t2.team_lead,t2.designation,t2.role_fit,t2.manager,t2.sr__manager,t2.grid,(CASE
+        query = f'''UPDATE product_csat_rdb SET team_lead=t3.team_lead,designation=t3.designation,role_fit=t3.role_fit,tenure=t3.days_category,manager=t3.manager,sr_manager=t3.sr__manager,grid=t3.grid ,team_lead_name=t3.team_lead_name,manager_name=t3.manager_name from (select t1.emp_id,t2.team_lead,t2.designation,t2.role_fit,t2.manager,t2.sr__manager,t2.grid,t2.team_lead_name,t2.manager_name,(CASE
             WHEN (CURRENT_DATE - t2.doj)::integer <= 30 THEN '0-30 days'
             WHEN (CURRENT_DATE - t2.doj)::integer <= 60 THEN '30-60 days'
             WHEN (CURRENT_DATE - t2.doj)::integer <= 90 THEN '60-90 days'
@@ -317,7 +317,7 @@ def csat_tl_fun():
         query = f'''truncate table fhpl_emp_details_rdb;'''
         cursor2.execute(query)      
         # Retrieve employee details from the source SDB
-        query = '''SELECT "employeeid","employeename","team_lead","designation","role_fit","doj","manager","sr__manager","grid" from emp_details_sdb;'''
+        query = '''SELECT "employeeid","employeename","team_lead","designation","role_fit","doj","manager","sr__manager","grid","team_lead_name","manager_name" from emp_details_sdb;'''
         cursor1.execute(query)       
         # Extract column names from the cursor's description and create a DataFrame
         column_names = [desc[0] for desc in cursor1.description]
@@ -328,7 +328,7 @@ def csat_tl_fun():
         for i, row in df.iterrows():
             value = row.values
             try:
-                query = '''INSERT INTO fhpl_emp_details_rdb ("employeeid","employeename","team_lead","designation","role_fit","doj","manager","sr__manager","grid") VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s);'''
+                query = '''INSERT INTO fhpl_emp_details_rdb ("employeeid","employeename","team_lead","designation","role_fit","doj","manager","sr__manager","grid","team_lead_name","manager_name") VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'''
                 cursor2.execute(cursor2.mogrify(query, value))
                 connection2.commit()
             except Exception as e:
@@ -482,4 +482,4 @@ with DAG(default_args=default_args,
     )
 
 # Define the dependency chain by specifying the order of tasks
-sdb_to_daily_product_rdb_ >> sdb_to_daily_csat_rdb_ >> sdb_to_daily_product_csat_rdb_ >> sdb_to_daily_csat_tl_fun_ >> sdb_to_daily_product_exportcall_rdb_ >> sdb_to_daily_shrinkage_
+sdb_to_daily_product_rdb_ >> sdb_to_daily_csat_rdb_ >> sdb_to_daily_csat_tl_fun_>>sdb_to_daily_product_csat_rdb_ >> sdb_to_daily_product_exportcall_rdb_ >> sdb_to_daily_shrinkage_
